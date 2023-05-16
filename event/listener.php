@@ -80,6 +80,11 @@ class listener implements EventSubscriberInterface
 			'PUSH_FIREBASE_USER_URL' => $this->controller_helper->route('push.register_user'),
 			'PUSH_FIREBASE_API_KEY' => $this->config['push_firebase_api_key'],
 			'PUSH_FIREBASE_MESSAGING_SENDER_ID' => $this->config['push_firebase_messaging_sender_id'],
+			'PUSH_FIREBASE_AUTHDOMAIN' => $this->config['push_firebase_authDomain'],
+			'PUSH_FIREBASE_PROJECTID' => $this->config['push_firebase_projectId'],
+			'PUSH_FIREBASE_STORAGEBUCKET' => $this->config['push_firebase_storageBucket'],
+			'PUSH_FIREBASE_MESSAGING_SENDER_ID' => $this->config['push_firebase_messaging_sender_id'],
+			'PUSH_FIREBASE_APPID' => $this->config['push_firebase_appId'],
 		]);
 	}
 }

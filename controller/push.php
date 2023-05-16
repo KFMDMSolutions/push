@@ -70,7 +70,13 @@ class push
 	{
 		$content = $this->template->render('service_worker.js.twig', [
 			'PUSH_FIREBASE_API_KEY' => $this->config['push_firebase_api_key'],
+			'PUSH_FIREBASE_MESSAGING_SENDER_ID' => $this->config['push_firebase_messaging_sender_id'],	
 			'PUSH_FIREBASE_MESSAGING_SENDER_ID' => $this->config['push_firebase_messaging_sender_id'],
+			'PUSH_FIREBASE_AUTHDOMAIN' => $this->config['push_firebase_authDomain'],
+			'PUSH_FIREBASE_PROJECTID' => $this->config['push_firebase_projectId'],
+			'PUSH_FIREBASE_STORAGEBUCKET' => $this->config['push_firebase_storageBucket'],
+			'PUSH_FIREBASE_MESSAGING_SENDER_ID' => $this->config['push_firebase_messaging_sender_id'],
+			'PUSH_FIREBASE_APPID' => $this->config['push_firebase_appId'],
 		]);
 
 		$response = new Response($content);
@@ -80,15 +86,15 @@ class push
 		return $response;
 	}
 
-	/**
-	 * Controller for /push/manifest.json route
-	 *
-	 * Manifest file setup is described here:
-	 * https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
-	 *
-	 *
-	 * @return Response
-	 */
+	// /**
+	 // * Controller for /push/manifest.json route
+	 // *
+	 // * Manifest file setup is described here:
+	 // * https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+	 // *
+	 // *
+	 // * @return Response
+	 // */
 	public function manifest()
 	{
 		$content = $this->template->render('manifest.json.twig', [
@@ -98,9 +104,9 @@ class push
 			'PUSH_FIREBASE_MANIFEST_THEME_COLOR' => $this->config['push_firebase_manifest_theme_color'],
 		]);
 
-		$response = new Response($content);
-		$response->headers->set('Content-Type', 'application/json');
-		$response->setCharset('UTF-8');
+		// $response = new Response($content);
+		// $response->headers->set('Content-Type', 'application/json');
+		// $response->setCharset('UTF-8');
 
 		return $response;
 	}

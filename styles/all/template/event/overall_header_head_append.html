@@ -1,13 +1,29 @@
-<script src="https://www.gstatic.com/firebasejs/3.6.4/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/3.6.4/firebase-messaging.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-messaging-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-analytics-compat.js"></script>
 <script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "{PUSH_FIREBASE_API_KEY}",
-    messagingSenderId: "{PUSH_FIREBASE_MESSAGING_SENDER_ID}"
+
+</script>
+<script type="text/javascript">
+ var firebaseConfig = {
+    apiKey: `{PUSH_FIREBASE_API_KEY}`,
+    authDomain: `{PUSH_FIREBASE_AUTHDOMAIN}`,
+	projectId: `{PUSH_FIREBASE_PROJECTID}`,
+	storageBucket: `{PUSH_FIREBASE_STORAGEBUCKET}`,
+    messagingSenderId: `{PUSH_FIREBASE_MESSAGING_SENDER_ID}`,
+    appId: `{PUSH_FIREBASE_APPID}`,
+	measurementId: `{PUSH_FIREBASE_MEASUREMENTID}`
   };
-  firebase.initializeApp(config);
+  var vapidKey = `{PUSH_FIREBASE_VAPID_KEY}`;
+  
   var firebase_phpbb_user_id = '{PUSH_FIREBASE_USER_ID}';
   var firebase_user_url = '{PUSH_FIREBASE_USER_URL}';
+  const firebaseApp = firebase.initializeApp(firebaseConfig);
+
 </script>
-<!-- INCLUDEJS push.js -->
+
+<script type="module" src='./ext/imkingdavid/push/styles/all/template/push.js?assets_version=312'></script>
+<!--script type="module" src='firebase-messaging-sw.js'></script-->
+
+
+

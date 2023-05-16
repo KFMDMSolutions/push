@@ -7,6 +7,7 @@ services:
             - '@config'
             - '@dbal.conn'
             - '%core.table_prefix%'
+            - '%core.root_path%'
 
     push.listener:
         class: imkingdavid\push\event\listener

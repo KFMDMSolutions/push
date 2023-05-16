@@ -28,14 +28,22 @@ class m1_init extends \phpbb\db\migration\migration
 	public function update_data()
 	{
 		return [
+
 			['config.add', ['push_firebase_api_key', '']],
 			['config.add', ['push_firebase_server_key', '']],
+			['config.add', ['push_firebase_vapid_key', '']],
 			['config.add', ['push_firebase_messaging_sender_id', '']],
 			['config.add', ['push_firebase_manifest_short_name', '']],
 			['config.add', ['push_firebase_manifest_name', '']],
+			['config.add', ['push_firebase_authDomain', '']],
+			['config.add', ['push_firebase_projectId', '']],
+			['config.add', ['push_firebase_storageBucket', '']],
+			['config.add', ['push_firebase_measurementId', '']],
+			['config.add', ['push_firebase_appId', '']],
 			['config.add', ['push_firebase_manifest_orientation', 'portrait']],
 			['config.add', ['push_firebase_manifest_theme_color', '#CADCEB']],
 		];
+		
 	}
 
 	/**
