@@ -18,3 +18,19 @@ services:
             - '@controller.helper'
         tags:
             - { name: event.listener }
+            
+    push.notification.method.browser:
+        class: imkingdavid\push\notifications\method\browser
+        shared: false
+        arguments:
+            - '@user_loader'
+            - '@user'
+            - '@config'
+            - '@dbal.conn'
+            - '@log'
+            - '@filesystem'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '%core.table_prefix%push_user_tokens'
+        tags:
+            - { name: notification.method }
