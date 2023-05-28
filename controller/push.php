@@ -137,7 +137,7 @@ class push
 			$tokens[] = $rows['token'];
 		}
 		$this->db->sql_freeresult($result);
-var_dump($tokens);
+
 		if (in_array($token, $tokens))
 		{
 			$response->setContent('Already registered.');

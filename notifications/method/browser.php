@@ -116,17 +116,20 @@ class browser extends \phpbb\notification\method\base
 			}
 
 			$display_data = $notification->prepare_for_display();
-
-			$message = html_entity_decode(truncate_string(strip_tags($display_data['FORMATTED_TITLE'] . ' ' . $display_data['REFERENCE'] . $display_data['FORUM'] . $display_data['REASON']), 1000, 1000), ENT_COMPAT);
+			$title = html_entity_decode(truncate_string(strip_tags($display_data['FORMATTED_TITLE'])));
+			//truncate_string(strip_tags($display_data['FORMATTED_TITLE'] . ' ' .
+			$message = html_entity_decode(truncate_string(strip_tags($display_data['REFERENCE'] . $display_data['FORUM'] . $display_data['REASON']), 1000, 1000), ENT_COMPAT);
 
 			$this->prepare_push_notifications($notification->user_id, [
-				'title'   => $this->config['sitename'],
+				'title'   => $title,
 				'message' => $message,
 				'url'     => $this->make_clean_url(str_replace('&amp;', '&', $display_data['URL'])),
 				'time'    => $notification->notification_time,
 				'badge'   => $this->config['push_badge_url'],
 				'avatar'  => $this->get_avatar_url($notification->get_avatar()),
 			]);
+			//error_log($display_data['URL']);
+			
 		}
 
 		// We're done, empty the queue
@@ -212,28 +215,49 @@ class browser extends \phpbb\notification\method\base
 		foreach ($subscriptions as $subscription)
 		{
 			$url = 'https://fcm.googleapis.com/fcm/send';
+			//$url = 'https://fcm.googleapis.com/v1/projects/phpbb3800/messages:send';
 
 			// Compile headers in one variable
 			$headers = array (
-			'Authorization:key=' . $this->config['push_firebase_server_key'],
-			'Content-Type:application/json'
+				//'Authorization:Bearer ' . $this->config['push_firebase_vapid_key'],
+				'Authorization:key=' . $this->config['push_firebase_server_key'],
+				'Content-Type:application/json',
+				//'accept: application/json'
 			);
 
 			// Add notification content to a variable for easy reference
+			
 			$notifData = [
 				'title' => $notification_data['title'],
 				'body' => $notification_data['message'],
+				'icon' => $notification_data['avatar'],
+				'url' => $notification_data['url'],
+				'dir' => 'rtl',
 			];
+			$webpush = [
+				'notification' => [
 
+				],
+				'data' => [
+					'title' => $notification_data['title'],
+					'body' => $notification_data['message'],
+					'icon' => $notification_data['avatar'],
+					'dir' => 'rtl',
+					'click_action' => $notification_data['url'],
+				],
+				'fcm_options' => [
+					'link' => $notification_data['url'],
+				],
+			];
+			//error_log($notification_data['url']);
 			// Create the api body
-			$apiBody = [
-				'notification' => $notifData,
+			$apiBody = [	
+
+				//'notification' => $notifData,	
+				//'webpush' => $webpush,
 				'data' => $notifData,
 				'to' => $subscription
 			];
-			
-			error_log("sub=".$subscription);
-
 			// Initialize curl with the prepared headers and body
 			$ch = curl_init();
 			curl_setopt ($ch, CURLOPT_URL, $url );
@@ -246,6 +270,7 @@ class browser extends \phpbb\notification\method\base
 			$result = curl_exec ( $ch );
 
 			error_log($result);
+			
 			// Close curl after call
 			curl_close ( $ch );
 
@@ -267,7 +292,10 @@ class browser extends \phpbb\notification\method\base
 		}
 
 		$filesystem = new \Symfony\Component\Filesystem\Filesystem();
-		return generate_board_url() . '/' . rtrim($filesystem->makePathRelative($url, $this->phpbb_root_path), '/');
+		//error_log("test ".$filesystem->makePathRelative($url, $this->phpbb_root_path));
+		return generate_board_url() . '/' . rtrim(str_replace('../','',$filesystem->makePathRelative($url, $this->phpbb_root_path)),'/');
+		//return generate_board_url() . '/' . rtrim($filesystem->makePathRelative($url, $this->phpbb_root_path), '/');
+		
 	}
 
 	/**
@@ -280,22 +308,23 @@ class browser extends \phpbb\notification\method\base
 	{
 		// There's no data field for src - e.g. in Gravatar driver.
 		// We need to parse the result HTML string.
-		if (!$avatar)
-		{
-			return generate_board_url() . '/ext/lavigor/notifications/styles/all/template/js/images/no_avatar.gif';
-		}
+		return 'https://www.ivelt.com/fav/apple-icon-60x60.png';
+		// if (!$avatar)
+		// {
+			// return generate_board_url() . '/fav/apple-icon-60x60.png';
+		// }
 
-		// Handle "lazy-loaded" case.
-		if (preg_match('#data-src="([^"]+)"#im', $avatar, $matches))
-		{
-			$avatar = $matches[1];
-		}
-		else
-		{
-			preg_match('#src="([^"]+)"#im', $avatar, $matches);
-			$avatar = $matches[1];
-		}
+		// // Handle "lazy-loaded" case.
+		// if (preg_match('#data-src="([^"]+)"#im', $avatar, $matches))
+		// {
+			// $avatar = $matches[1];
+		// }
+		// else
+		// {
+			// preg_match('#src="([^"]+)"#im', $avatar, $matches);
+			// $avatar = $matches[1];
+		// }
 
-		return $this->make_clean_url($avatar);
+		// return $this->make_clean_url($avatar);
 	}
 }

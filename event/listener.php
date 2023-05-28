@@ -69,7 +69,7 @@ class listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return [
-			'core.page_header_after' => 'page_header_after',
+			'core.page_header_after' => 'page_header_after',			
 		];
 	}
 

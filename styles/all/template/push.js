@@ -15,6 +15,7 @@
 // const messaging = getMessaging(app);
 
 const registration = await navigator.serviceWorker.register('./firebase-messaging-sw.js')
+
 const messaging = firebase.messaging();
 // Perhaps move this into an onclick on a button
 // so that permission is only requested when the user wants to
@@ -47,23 +48,29 @@ function requestPermission() {
 			}).catch((err)=> {
 				//console.log('Unable to get permission to notify.', err);
 			});
-
+			
 			messaging.onMessage((payload)=> {
 			  // If the user is already on the page
 			  // don't display a traditional notification
 			  // do something else, maybe?
-			  console.log('onMessage', payload);
+				console.log('onMessage', payload);
+			  
+				const notificationTitle = payload.data.title;
+				const notificationOptions = {
+					body: payload.data.body,
+					icon: payload.data.icon,
+					dir: payload.data.dir,
+					data: {
+						url: payload.data.url,
+					},
+				};
+				navigator.serviceWorker.ready.then((registration1) => {
+					registration1.showNotification(notificationTitle, notificationOptions);
+				});					
 			});
 		}
 	});
 }
 requestPermission()
-
-  // const notificationTitle = 'Background Message Title';
-  // const notificationOptions = {
-    // body: 'Background Message body.',
-    // icon: '/firebase-logo.png'
-  // };
-
-  // self.registration.showNotification(notificationTitle,
-    // notificationOptions);
+	
+	
