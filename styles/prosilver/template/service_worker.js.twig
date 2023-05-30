@@ -12,26 +12,28 @@ firebase.initializeApp({
     appId: `{PUSH_FIREBASE_APPID}`,
 	measurementId: `{PUSH_FIREBASE_MEASUREMENTID}`
 });
-
+const firebase_verify_user_url = '{PUSH_FIREBASE_VERIFY_USER}';
 const messaging = firebase.messaging();
 
-
-
 messaging.onBackgroundMessage((payload) => {
-	console.log('[firebase-messaging-sw.js] Received background message ', payload);
-	// Customize notification here
-	const notificationTitle = payload.data.title;
-	const notificationOptions = {
-		body: payload.data.body,
-		icon: payload.data.icon,
-		dir: payload.data.dir,
-		data: {
-			url: payload.data.url,
-		},
-	};
-
-	self.registration.showNotification(notificationTitle, notificationOptions);
-
+	verifiedUser(payload.data.user_id).then(result =>{
+		if(result == true){
+			console.log('[firebase-messaging-sw.js] Received background message ', payload);
+			// Customize notification here
+			const notificationTitle = payload.data.title;
+			const notificationOptions = {
+				body: payload.data.body,
+				icon: payload.data.icon,
+				dir: payload.data.dir,
+				data: {
+					url: payload.data.url,
+				},
+			};
+			self.registration.showNotification(notificationTitle, notificationOptions);
+		}else{
+			console.log('You are not Logged in');
+		}
+	});
 });
 
 self.addEventListener('notificationclick', function (event) {
@@ -46,3 +48,20 @@ self.addEventListener('notificationclick', function (event) {
 		if (clients.openWindow) return clients.openWindow(event.notification.data.url);
 	}));
 });
+
+
+
+function verifiedUser(userid) {
+  return fetch(firebase_verify_user_url, {
+      method: 'GET',
+    })
+    .then(function(response) {
+      return response.text();
+    })
+    .then(function(res) {
+		if(res == userid){
+			return true;
+		}
+		return false;
+    })
+}

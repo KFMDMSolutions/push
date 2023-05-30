@@ -11,9 +11,10 @@ namespace imkingdavid\push\controller;
 
 use phpbb\config\config;
 use phpbb\exception\http_exception;
-use phpbb\controller\helper as controller_helper;
+use phpbb\controller\helper;
 use phpbb\request\request;
 use phpbb\db\driver\factory;
+use phpbb\user;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -33,11 +34,19 @@ class push
 	 * @var config
 	 */
 	protected $config;
+	
+	/** @var user */
+	protected $user;
 
 	/**
 	 * @var factory
 	 */
 	protected $db;
+	
+	/**
+	 * @var helper
+	 */
+	protected $controller_helper;
 
 	/**
 	 * @var string
@@ -51,14 +60,18 @@ class push
 	 * @param request $request
 	 * @param config $config
 	 * @param factory $db
+	 * @param user $user
+	 * @param helper $controller_helper
 	 */
-	public function __construct(\Twig_Environment $twig, request $request, config $config, factory $db, $table_prefix)
+	public function __construct(\Twig_Environment $twig, request $request, config $config, factory $db, user $user, helper $controller_helper, $table_prefix)
 	{
 		$this->request = $request;
 		$this->config = $config;
 		$this->template = $twig;
 		$this->db = $db;
 		$this->table_prefix = $table_prefix;
+		$this->user = $user;
+		$this->controller_helper = $controller_helper;
 	}
 
 	/**
@@ -71,12 +84,11 @@ class push
 		$content = $this->template->render('service_worker.js.twig', [
 			'PUSH_FIREBASE_API_KEY' => $this->config['push_firebase_api_key'],
 			'PUSH_FIREBASE_MESSAGING_SENDER_ID' => $this->config['push_firebase_messaging_sender_id'],	
-			'PUSH_FIREBASE_MESSAGING_SENDER_ID' => $this->config['push_firebase_messaging_sender_id'],
 			'PUSH_FIREBASE_AUTHDOMAIN' => $this->config['push_firebase_authDomain'],
 			'PUSH_FIREBASE_PROJECTID' => $this->config['push_firebase_projectId'],
 			'PUSH_FIREBASE_STORAGEBUCKET' => $this->config['push_firebase_storageBucket'],
-			'PUSH_FIREBASE_MESSAGING_SENDER_ID' => $this->config['push_firebase_messaging_sender_id'],
 			'PUSH_FIREBASE_APPID' => $this->config['push_firebase_appId'],
+			'PUSH_FIREBASE_VERIFY_USER' => $this->controller_helper->route('push.verify_user'),
 		]);
 
 		$response = new Response($content);
@@ -103,11 +115,6 @@ class push
 			'PUSH_FIREBASE_MANIFEST_ORIENTATION' => $this->config['push_firebase_manifest_orientation'],
 			'PUSH_FIREBASE_MANIFEST_THEME_COLOR' => $this->config['push_firebase_manifest_theme_color'],
 		]);
-
-		// $response = new Response($content);
-		// $response->headers->set('Content-Type', 'application/json');
-		// $response->setCharset('UTF-8');
-
 		return $response;
 	}
 
@@ -149,6 +156,50 @@ class push
 		$result = $this->db->sql_query($sql);
 
 		$response->setContent('Registered.');
+		return $response;
+	}
+	
+	public function unregister_user()
+	{
+		$response = new Response();
+		$user_id = $this->request->variable('user_id', 0);
+		$token = $this->request->variable('firebase_token', '');
+
+		if (empty($user_id) || empty($token))
+		{
+			$response->setStatusCode(500);
+			$response->setContent('User ID and Token must be provided.');
+			return $response;
+		}
+
+		$sql = 'SELECT user_id,token FROM ' . $this->table_prefix . 'push_user_tokens WHERE user_id = ' . (int) $user_id . ' AND token = "' . $this->db->sql_escape($token) . '"';
+		$result = $this->db->sql_query($sql);
+		$tokens = [];
+		while($rows = $this->db->sql_fetchrow($result))
+		{
+			$tokens[] = $rows['token'];
+		}
+		$this->db->sql_freeresult($result);
+
+		if (!in_array($token, $tokens))
+		{
+			$response->setContent('not registered.');
+			return $response;
+		}
+		$sql = 'DELETE FROM ' . $this->table_prefix . 'push_user_tokens WHERE user_id = ' . (int) $user_id . ' AND token = "' . $this->db->sql_escape($token) . '"';
+		$result = $this->db->sql_query($sql);
+
+		$response->setContent('unregistered.');
+		return $response;
+	}
+	
+	
+	public function verify_user()
+	{
+		$response = new Response();
+		$user_id = $this->user->data['user_id'];
+		$response->setStatusCode(200);
+		$response->setContent($user_id);
 		return $response;
 	}
 }

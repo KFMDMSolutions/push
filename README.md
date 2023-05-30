@@ -1,5 +1,3 @@
-This extention is based on https://github.com/imkingdavid/push
-
 # Push Notifications for phpBB
 
 This extension adds Deskotp and Push notifications for supported devices and browsers to phpBB 3.2.

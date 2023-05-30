@@ -11,3 +11,11 @@ push.service_worker:
 push.register_user:
     path: /push/register_user
     defaults: { _controller: push.controller:register_user }
+    
+push.unsubscribe_user:
+    path: /push/unregister_user
+    defaults: { _controller: push.controller:unregister_user }
+    
+push.verify_user:
+    path: /push/verify_user
+    defaults: { _controller: push.controller:verify_user }

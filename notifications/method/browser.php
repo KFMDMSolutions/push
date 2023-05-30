@@ -127,9 +127,7 @@ class browser extends \phpbb\notification\method\base
 				'time'    => $notification->notification_time,
 				'badge'   => $this->config['push_badge_url'],
 				'avatar'  => $this->get_avatar_url($notification->get_avatar()),
-			]);
-			//error_log($display_data['URL']);
-			
+			]);			
 		}
 
 		// We're done, empty the queue
@@ -219,10 +217,8 @@ class browser extends \phpbb\notification\method\base
 
 			// Compile headers in one variable
 			$headers = array (
-				//'Authorization:Bearer ' . $this->config['push_firebase_vapid_key'],
 				'Authorization:key=' . $this->config['push_firebase_server_key'],
 				'Content-Type:application/json',
-				//'accept: application/json'
 			);
 
 			// Add notification content to a variable for easy reference
@@ -232,29 +228,14 @@ class browser extends \phpbb\notification\method\base
 				'body' => $notification_data['message'],
 				'icon' => $notification_data['avatar'],
 				'url' => $notification_data['url'],
+				'time' => $notification_data['time'],
 				'dir' => 'rtl',
+				'user_id' => $user_id,
 			];
-			$webpush = [
-				'notification' => [
-
-				],
-				'data' => [
-					'title' => $notification_data['title'],
-					'body' => $notification_data['message'],
-					'icon' => $notification_data['avatar'],
-					'dir' => 'rtl',
-					'click_action' => $notification_data['url'],
-				],
-				'fcm_options' => [
-					'link' => $notification_data['url'],
-				],
-			];
-			//error_log($notification_data['url']);
 			// Create the api body
 			$apiBody = [	
 
 				//'notification' => $notifData,	
-				//'webpush' => $webpush,
 				'data' => $notifData,
 				'to' => $subscription
 			];
@@ -268,9 +249,7 @@ class browser extends \phpbb\notification\method\base
 
 			// Execute call and save result
 			$result = curl_exec ( $ch );
-
-			error_log($result);
-			
+		
 			// Close curl after call
 			curl_close ( $ch );
 
@@ -292,10 +271,7 @@ class browser extends \phpbb\notification\method\base
 		}
 
 		$filesystem = new \Symfony\Component\Filesystem\Filesystem();
-		//error_log("test ".$filesystem->makePathRelative($url, $this->phpbb_root_path));
-		return generate_board_url() . '/' . rtrim(str_replace('../','',$filesystem->makePathRelative($url, $this->phpbb_root_path)),'/');
-		//return generate_board_url() . '/' . rtrim($filesystem->makePathRelative($url, $this->phpbb_root_path), '/');
-		
+		return generate_board_url() . '/' . rtrim(str_replace('../','',$filesystem->makePathRelative($url, $this->phpbb_root_path)),'/');		
 	}
 
 	/**

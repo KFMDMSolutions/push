@@ -1,8 +1,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-messaging-compat.js"></script>
-<script>
 
-</script>
 <script type="text/javascript">
  var firebaseConfig = {
     apiKey: `{PUSH_FIREBASE_API_KEY}`,
@@ -14,15 +12,14 @@
 	measurementId: `{PUSH_FIREBASE_MEASUREMENTID}`
   };
   var vapidKey = `{PUSH_FIREBASE_VAPID_KEY}`;
-  var firebase_phpbb_user_id = '{PUSH_FIREBASE_USER_ID}';
-  var firebase_user_url = '{PUSH_FIREBASE_USER_URL}';
+  
+  var firebase_user_url = `{PUSH_FIREBASE_USER_URL}`;
+  var firebase_verify_user_url = `{PUSH_FIREBASE_VERIFY_USER}`;
   const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 </script>
 
 <script type="module" src='./ext/imkingdavid/push/styles/all/template/push.js?assets_version=312'></script>
 <!--script type="module" src='firebase-messaging-sw.js'></script-->
-
-
 
 

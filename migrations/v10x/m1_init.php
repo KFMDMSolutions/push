@@ -32,7 +32,7 @@ class m1_init extends \phpbb\db\migration\migration
 			['config.add', ['push_firebase_api_key', '']],
 			['config.add', ['push_firebase_server_key', '']],
 			['config.add', ['push_firebase_vapid_key', '']],
-			['config.add', ['push_firebase_messaging_sender_id', '']],
+			['config.add', ['push_firebase_messaging_sender_id', '']],			
 			['config.add', ['push_firebase_manifest_short_name', '']],
 			['config.add', ['push_firebase_manifest_name', '']],
 			['config.add', ['push_firebase_authDomain', '']],
@@ -42,6 +42,7 @@ class m1_init extends \phpbb\db\migration\migration
 			['config.add', ['push_firebase_appId', '']],
 			['config.add', ['push_firebase_manifest_orientation', 'portrait']],
 			['config.add', ['push_firebase_manifest_theme_color', '#CADCEB']],
+			
 		];
 		
 	}
