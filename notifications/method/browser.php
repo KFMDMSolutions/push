@@ -127,7 +127,8 @@ class browser extends \phpbb\notification\method\base
 				'time'    => $notification->notification_time,
 				'badge'   => $this->config['push_badge_url'],
 				'avatar'  => $this->get_avatar_url($notification->get_avatar()),
-			]);			
+			]);
+			
 		}
 
 		// We're done, empty the queue
@@ -213,12 +214,12 @@ class browser extends \phpbb\notification\method\base
 		foreach ($subscriptions as $subscription)
 		{
 			$url = 'https://fcm.googleapis.com/fcm/send';
-			//$url = 'https://fcm.googleapis.com/v1/projects/phpbb3800/messages:send';
 
 			// Compile headers in one variable
 			$headers = array (
 				'Authorization:key=' . $this->config['push_firebase_server_key'],
 				'Content-Type:application/json',
+				//'accept: application/json'
 			);
 
 			// Add notification content to a variable for easy reference
@@ -249,7 +250,7 @@ class browser extends \phpbb\notification\method\base
 
 			// Execute call and save result
 			$result = curl_exec ( $ch );
-		
+			
 			// Close curl after call
 			curl_close ( $ch );
 

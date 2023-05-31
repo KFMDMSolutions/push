@@ -88,7 +88,7 @@ class push
 			'PUSH_FIREBASE_PROJECTID' => $this->config['push_firebase_projectId'],
 			'PUSH_FIREBASE_STORAGEBUCKET' => $this->config['push_firebase_storageBucket'],
 			'PUSH_FIREBASE_APPID' => $this->config['push_firebase_appId'],
-			'PUSH_FIREBASE_VERIFY_USER' => $this->controller_helper->route('push.verify_user'),
+			'PUSH_FIREBASE_IS_USER_LOGGEDIN' => $this->controller_helper->route('push.is_user_loggedin'),
 		]);
 
 		$response = new Response($content);
@@ -115,6 +115,11 @@ class push
 			'PUSH_FIREBASE_MANIFEST_ORIENTATION' => $this->config['push_firebase_manifest_orientation'],
 			'PUSH_FIREBASE_MANIFEST_THEME_COLOR' => $this->config['push_firebase_manifest_theme_color'],
 		]);
+
+		// $response = new Response($content);
+		// $response->headers->set('Content-Type', 'application/json');
+		// $response->setCharset('UTF-8');
+
 		return $response;
 	}
 
@@ -129,7 +134,7 @@ class push
 		$user_id = $this->request->variable('user_id', 0);
 		$token = $this->request->variable('firebase_token', '');
 
-		if (empty($user_id) || empty($token))
+		if (empty($user_id) || empty($token) || $user_id == 1)
 		{
 			$response->setStatusCode(500);
 			$response->setContent('User ID and Token must be provided.');
@@ -194,12 +199,51 @@ class push
 	}
 	
 	
-	public function verify_user()
+	public function is_user_loggedin()
 	{
 		$response = new Response();
 		$user_id = $this->user->data['user_id'];
+
+		if (empty($user_id) || $user_id == 1)
+		{
+			$response->setStatusCode(204);
+			return $response;
+		}
+
 		$response->setStatusCode(200);
 		$response->setContent($user_id);
+		return $response;
+	}	
+	
+	public function is_registered_user()
+	{
+		$response = new Response();
+		$user_id = $this->request->variable('user_id', 0);
+		$token = $this->request->variable('firebase_token', '');
+
+		if (empty($user_id) || empty($token))
+		{
+			$response->setStatusCode(500);
+			$response->setContent('User ID and Token must be provided.');
+			return $response;
+		}
+
+		$sql = 'SELECT user_id,token FROM ' . $this->table_prefix . 'push_user_tokens WHERE user_id = ' . (int) $user_id . ' AND token = "' . $this->db->sql_escape($token) . '"';
+		$result = $this->db->sql_query($sql);
+		$tokens = [];
+		while($rows = $this->db->sql_fetchrow($result))
+		{
+			$tokens[] = $rows['token'];
+		}
+		$this->db->sql_freeresult($result);
+
+		if (!in_array($token, $tokens))
+		{
+			$response->setStatusCode(204);
+			return $response;
+		}
+		$response->setStatusCode(200);
+		$response->setContent('registered');
 		return $response;
 	}
 }

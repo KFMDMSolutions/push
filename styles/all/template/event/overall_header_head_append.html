@@ -1,3 +1,5 @@
+<!-- IF not S_IS_BOT -->
+
 <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-messaging-compat.js"></script>
 
@@ -14,12 +16,15 @@
   var vapidKey = `{PUSH_FIREBASE_VAPID_KEY}`;
   
   var firebase_user_url = `{PUSH_FIREBASE_USER_URL}`;
-  var firebase_verify_user_url = `{PUSH_FIREBASE_VERIFY_USER}`;
+  var firebase_unsubscribe_url = `{PUSH_FIREBASE_UNSUBSCRIBE_URL}`;
+  var push_firebase_is_registered_user = `{PUSH_FIREBASE_IS_REGISTERED_USER}`;
+  var push_firebase_is_user_loggedin = `{PUSH_FIREBASE_IS_USER_LOGGEDIN}`;
   const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 </script>
-
+<!-- INCLUDECSS @imkingdavid_push/notifications.css -->
 <script type="module" src='./ext/imkingdavid/push/styles/all/template/push.js?assets_version=312'></script>
 <!--script type="module" src='firebase-messaging-sw.js'></script-->
+<!-- ENDIF -->
 
 

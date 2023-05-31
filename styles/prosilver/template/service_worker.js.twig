@@ -12,7 +12,7 @@ firebase.initializeApp({
     appId: `{PUSH_FIREBASE_APPID}`,
 	measurementId: `{PUSH_FIREBASE_MEASUREMENTID}`
 });
-const firebase_verify_user_url = '{PUSH_FIREBASE_VERIFY_USER}';
+const firebase_is_user_loggedin = '{PUSH_FIREBASE_IS_USER_LOGGEDIN}';
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
@@ -52,7 +52,7 @@ self.addEventListener('notificationclick', function (event) {
 
 
 function verifiedUser(userid) {
-  return fetch(firebase_verify_user_url, {
+  return fetch(firebase_is_user_loggedin, {
       method: 'GET',
     })
     .then(function(response) {

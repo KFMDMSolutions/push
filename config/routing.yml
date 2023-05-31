@@ -16,6 +16,10 @@ push.unsubscribe_user:
     path: /push/unregister_user
     defaults: { _controller: push.controller:unregister_user }
     
-push.verify_user:
-    path: /push/verify_user
-    defaults: { _controller: push.controller:verify_user }
+push.is_registered_user:
+    path: /push/is_registered_user
+    defaults: { _controller: push.controller:is_registered_user }
+    
+push.is_user_loggedin:  
+    path: /push/is_user_loggedin
+    defaults: { _controller: push.controller:is_user_loggedin }

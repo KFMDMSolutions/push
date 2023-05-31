@@ -70,8 +70,6 @@ class listener implements EventSubscriberInterface
 	{
 		return [
 			'core.page_header_after' => 'page_header_after',
-			'core.session_kill_after' => 'test',
-			
 		];
 	}
 
@@ -81,7 +79,8 @@ class listener implements EventSubscriberInterface
 			'PUSH_FIREBASE_USER_ID' => $this->user->data['user_id'],
 			'PUSH_FIREBASE_USER_URL' => $this->controller_helper->route('push.register_user'),
 			'PUSH_FIREBASE_UNSUBSCRIBE_URL' => $this->controller_helper->route('push.unsubscribe_user'),
-			'PUSH_FIREBASE_VERIFY_USER' => $this->controller_helper->route('push.verify_user'),
+			'PUSH_FIREBASE_IS_REGISTERED_USER' => $this->controller_helper->route('push.is_registered_user'),
+			'PUSH_FIREBASE_IS_USER_LOGGEDIN' => $this->controller_helper->route('push.is_user_loggedin'),
 			'PUSH_FIREBASE_API_KEY' => $this->config['push_firebase_api_key'],
 			//'PUSH_FIREBASE_VAPID_KEY' => $this->config['push_firebase_vapid_key'],
 			'PUSH_FIREBASE_MESSAGING_SENDER_ID' => $this->config['push_firebase_messaging_sender_id'],
@@ -91,10 +90,5 @@ class listener implements EventSubscriberInterface
 			'PUSH_FIREBASE_MESSAGING_SENDER_ID' => $this->config['push_firebase_messaging_sender_id'],
 			'PUSH_FIREBASE_APPID' => $this->config['push_firebase_appId'],
 		]);
-	}
-	
-	public function test($event)
-	{
-		error_log('logout '.$event['user_id']);
 	}
 }
