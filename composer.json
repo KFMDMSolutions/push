@@ -12,6 +12,13 @@
 			"name": "David King (imkingdavid)",
 			"email": "imkingdavid@gmail.com",
 			"homepage": "http://www.thedavidking.com",
+			"role": "Orignal Developer"
+		},
+		{
+			"name": "KFMDM Solutions",
+			"username": "KFMDM Solutions",
+			"email": "contact@kfmdmsolutions.com",
+			"homepage": "https://www.kfmdmsolutions.com/",
 			"role": "Developer"
 		}
 	],
@@ -25,6 +32,13 @@
 		"display-name": "Push Notifications for phpBB",
 		"soft-require": {
 			"phpbb/phpbb": "3.2.*@dev"
+		},
+		"version-check": {
+			"host": "raw.githubusercontent.com",
+			"directory": "/KFMDMSolutions/push/develop/",
+			"filename": "version.json",
+			"ssl": true
 		}
+
 	}
 }
