@@ -1,3 +1,3 @@
 .gitattributes		export-ignore
 version.json		export-ignore
-readme.md		export-ignore 
+README.md		export-ignore 
