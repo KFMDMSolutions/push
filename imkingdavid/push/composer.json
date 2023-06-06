@@ -2,7 +2,7 @@
 	"name": "imkingdavid/push",
 	"type": "phpbb-extension",
 	"description": "An extension for phpBB 3.1 that will add desktop and push (mobile) notifications (via Chrome) to your board.",
-	"homepage": "http://www.github.com/imkingdavid/push",
+	"homepage": "http://www.github.com/KFMDMSolutions/push",
 	"version": "1.0.0",
 	"time": "2017-01-09",
 	"keywords": ["phpbb", "extension", "push", "notifications"],
@@ -35,7 +35,7 @@
 		},
 		"version-check": {
 			"host": "raw.githubusercontent.com",
-			"directory": "/KFMDMSolutions/push/develop/",
+			"directory": "/KFMDMSolutions/push/develop",
 			"filename": "version.json",
 			"ssl": true
 		}
