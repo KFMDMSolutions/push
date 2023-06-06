@@ -3,7 +3,7 @@
 	"type": "phpbb-extension",
 	"description": "An extension for phpBB 3.1 that will add desktop and push (mobile) notifications (via Chrome) to your board.",
 	"homepage": "http://www.github.com/KFMDMSolutions/push",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"time": "2017-01-09",
 	"keywords": ["phpbb", "extension", "push", "notifications"],
 	"license": "GPL-2.0",
